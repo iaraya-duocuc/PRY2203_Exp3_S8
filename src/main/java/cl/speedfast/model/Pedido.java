@@ -109,4 +109,9 @@ public abstract class Pedido implements Cancelable, Despachable, Rastreable {
                 !repartidorAsignado.equals("No asignado");
     }
 
+    @Override
+    public String toString() {
+        return "Pedido #" + idPedido + " - " + direccion;
+    }
+
 }
