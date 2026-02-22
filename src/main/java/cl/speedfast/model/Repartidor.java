@@ -1,6 +1,7 @@
 package cl.speedfast.model;
 
 import cl.speedfast.config.AppConfig;
+import cl.speedfast.controller.ControladorEntregas;
 import cl.speedfast.controller.ControladorPedidos;
 
 /**
@@ -47,7 +48,7 @@ public class Repartidor implements Runnable {
                         pedido.getIdPedido(),
                         AppConfig.EstadoPedido.EN_REPARTO
                 );
-                ControladorPedidos.registrarEntrega(
+                ControladorEntregas.registrarEntrega(
                         pedido.getIdPedido(),
                         this.id
                 );
@@ -93,5 +94,10 @@ public class Repartidor implements Runnable {
                     "[Repartidor - " + nombre + "] Estado: " + pedido.getEstado().obtenerNombre() + "."
             );
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Repartidor #" + id + " - " + nombre;
     }
 }
