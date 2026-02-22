@@ -66,9 +66,9 @@ public class VentanaPrincipal extends JFrame {
         //        new VentanaRepartidor()
         //);
 
-        btnRegistrarEntrega.addActionListener(e ->
-                new VentanaRegistroEntrega()
-        );
+        //btnRegistrarEntrega.addActionListener(e ->
+        //        new VentanaRegistroEntrega()
+        //);
 
     }
 }
