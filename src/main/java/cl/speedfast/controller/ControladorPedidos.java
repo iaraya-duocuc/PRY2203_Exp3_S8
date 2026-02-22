@@ -1,37 +1,51 @@
 package cl.speedfast.controller;
 
 import cl.speedfast.config.AppConfig;
-import cl.speedfast.dao.EntregaDAO;
 import cl.speedfast.dao.PedidoDAO;
-import cl.speedfast.dao.RepartidorDAO;
 import cl.speedfast.model.Pedido;
-import cl.speedfast.model.Repartidor;
 import cl.speedfast.model.ZonaDeCarga;
 
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
- * Controlador central que gestiona los pedidos en memoria.
+ * Controlador que gestiona los pedidos.
  */
 public class ControladorPedidos {
 
     private static final ZonaDeCarga zonaDeCarga = new ZonaDeCarga();
-
-    private static final RepartidorDAO repartidorDAO = new RepartidorDAO();
     private static final PedidoDAO pedidoDAO = new PedidoDAO();
-    private static final EntregaDAO entregaDAO = new EntregaDAO();
 
     public static void agregarPedido(Pedido pedido) {
-        pedidoDAO.guardar(pedido);
+        try {
+            pedidoDAO.create(pedido);
+        } catch (SQLException e) {
+            throw new RuntimeException("Error registrando pedido", e);
+        }
+    }
+
+    public static void eliminarPedido(int id) {
+        try {
+            pedidoDAO.delete(id);
+        } catch (SQLException e) {
+            throw new RuntimeException("Error eliminando pedido", e);
+        }
     }
 
     public static List<Pedido> obtenerPedidos() {
-        return pedidoDAO.listarTodos();
+        try {
+            return pedidoDAO.readAll();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error obteniendo pedido", e);
+        }
     }
 
     public static void actualizarEstadoPedido(int idPedido, AppConfig.EstadoPedido estado) {
-        pedidoDAO.actualizarEstado(idPedido, estado.name());
+        try {
+            pedidoDAO.updateEstado(idPedido, estado);
+        } catch (SQLException e) {
+            throw new RuntimeException("Error actualizando pedido", e);
+        }
     }
 
     public static ZonaDeCarga obtenerZonaDeCarga() {
@@ -40,7 +54,13 @@ public class ControladorPedidos {
 
     public static void cargarPedidosPendientesEnZona() {
         zonaDeCarga.limpiar();
-        List<Pedido> pedidos = pedidoDAO.listarTodos();
+        List<Pedido> pedidos;
+
+        try {
+            pedidos = pedidoDAO.readAll();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error cargando pedidos pendientes", e);
+        }
 
         for (Pedido p : pedidos) {
             // Solo agregar si está pendiente y no tiene repartidor asignado
@@ -49,19 +69,5 @@ public class ControladorPedidos {
             }
         }
     }
-
-    public static void registrarRepartidor(String nombre) {
-        repartidorDAO.guardar(nombre);
-    }
-
-    public static List<Repartidor> obtenerRepartidores() {
-        return repartidorDAO.listarTodos();
-    }
-
-    public static void registrarEntrega(int idPedido, int idRepartidor) {
-        entregaDAO.guardar(idPedido, idRepartidor);
-    }
-
-
 
 }
