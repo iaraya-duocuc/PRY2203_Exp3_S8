@@ -1,6 +1,7 @@
 package cl.speedfast.ui;
 
 import cl.speedfast.controller.ControladorPedidos;
+import cl.speedfast.controller.ControladorRepartidores;
 import cl.speedfast.model.Pedido;
 import cl.speedfast.model.Repartidor;
 
@@ -55,6 +56,10 @@ public class VentanaListaPedidos extends JFrame {
         add(new JScrollPane(tabla), BorderLayout.CENTER);
     }
 
+    public void refrescarTabla() {
+        cargarDatos();
+    }
+
     private void cargarDatos() {
 
         modelo.setRowCount(0);
@@ -77,7 +82,7 @@ public class VentanaListaPedidos extends JFrame {
 
         try {
 
-            List<Repartidor> repartidores = ControladorPedidos.obtenerRepartidores();
+            List<Repartidor> repartidores = ControladorRepartidores.listarRepartidores();
 
             if (repartidores.isEmpty()) {
                 throw new Exception("No existen repartidores registrados.");
