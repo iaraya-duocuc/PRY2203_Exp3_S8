@@ -14,7 +14,6 @@ import java.awt.*;
  */
 public class VentanaRegistroPedido extends JFrame {
 
-    //private JTextField txtId;
     private JTextField txtDireccion;
     private JTextField txtDistancia;
     private JComboBox<String> comboTipo;
@@ -35,10 +34,6 @@ public class VentanaRegistroPedido extends JFrame {
     private void inicializarComponentes() {
 
         setLayout(new GridLayout(5, 2, 5, 5));
-
-        //add(new JLabel("ID:"));
-        //txtId = new JTextField();
-        //add(txtId);
 
         add(new JLabel("Dirección:"));
         txtDireccion = new JTextField();
@@ -68,46 +63,54 @@ public class VentanaRegistroPedido extends JFrame {
 
         try {
 
-            //int id = Integer.parseInt(txtId.getText());
-            String direccion = txtDireccion.getText();
-            double distancia = Double.parseDouble(txtDistancia.getText());
-            String tipo = (String) comboTipo.getSelectedItem();
+            String direccion = txtDireccion.getText().trim();
+            String distanciaStr = txtDistancia.getText().trim();
 
             if (direccion.isEmpty()) {
-                throw new Exception("Dirección vacía");
+                throw new Exception("La dirección es obligatoria.");
             }
+
+            if (distanciaStr.isEmpty()) {
+                throw new Exception("La distancia es obligatoria.");
+            }
+
+            double distancia;
+
+            try {
+                distancia = Double.parseDouble(distanciaStr);
+            } catch (NumberFormatException e) {
+                throw new Exception("Formato de distancia inválido.");
+            }
+
+            if (distancia <= 0) {
+                throw new Exception("La distancia debe ser mayor a 0.");
+            }
+
+            String tipo = (String) comboTipo.getSelectedItem();
 
             Pedido pedido;
 
             switch (tipo) {
-
                 case "Comida":
                     pedido = new PedidoComida(direccion, true, distancia);
                     break;
-
                 case "Express":
                     pedido = new PedidoExpress(direccion, true, distancia);
                     break;
-
                 case "Encomienda":
                     pedido = new PedidoEncomienda(direccion, 5, true, distancia);
                     break;
-
                 default:
-                    throw new Exception("Tipo inválido");
+                    throw new Exception("Tipo inválido.");
             }
 
             ControladorPedidos.agregarPedido(pedido);
 
-            JOptionPane.showMessageDialog(this,
-                    "Pedido registrado correctamente");
-
+            JOptionPane.showMessageDialog(this, "Pedido registrado correctamente");
             dispose();
 
         } catch (Exception ex) {
-
-            JOptionPane.showMessageDialog(this,
-                    "Error: " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
