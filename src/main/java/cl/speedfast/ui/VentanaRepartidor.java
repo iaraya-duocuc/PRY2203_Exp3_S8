@@ -7,10 +7,11 @@ import java.awt.*;
 
 public class VentanaRepartidor extends JFrame {
 
+    private Integer idRepartidor; // null = registro, != null = edición
     private JTextField txtNombre;
+
     private JButton btnGuardar;
     private Runnable onSuccess;
-    private Integer idRepartidor; // null = registro, != null = edición
 
     public VentanaRepartidor(Runnable onSuccess) {
         this(null, null, onSuccess);
