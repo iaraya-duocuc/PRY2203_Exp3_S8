@@ -41,6 +41,9 @@ public abstract class Pedido implements Cancelable, Despachable, Rastreable {
         this.estado = nuevoEstado;
     }
     public void setIdPedido(int idPedido) {this.idPedido = idPedido;}
+    public void setDireccion(String direccion) {this.direccion = direccion;}
+    public void setDistanciaKm(int distanciaKm) {this.distanciaKm = distanciaKm;}
+
     /**
      * Asignacion generica de repartidor.
      * Puede ser sobreescrita por las subclases.
@@ -81,6 +84,11 @@ public abstract class Pedido implements Cancelable, Despachable, Rastreable {
         );
     }
 
+    @Override
+    public String toString() {
+        return "Pedido #" + idPedido + " - " + direccion;
+    }
+
     /**
      * Ejecuta el despacho del pedido si no esta cancelado.
      */
@@ -107,11 +115,6 @@ public abstract class Pedido implements Cancelable, Despachable, Rastreable {
     public boolean tieneRepartidorAsignado() {
         return repartidorAsignado != null &&
                 !repartidorAsignado.equals("No asignado");
-    }
-
-    @Override
-    public String toString() {
-        return "Pedido #" + idPedido + " - " + direccion;
     }
 
 }

@@ -40,11 +40,19 @@ public class ControladorPedidos {
         }
     }
 
+    public static void actualizarPedido(Pedido pedido) {
+        try {
+            pedidoDAO.update(pedido);
+        } catch (SQLException e) {
+            throw new RuntimeException("Error actualizando pedido", e);
+        }
+    }
+
     public static void actualizarEstadoPedido(int idPedido, AppConfig.EstadoPedido estado) {
         try {
             pedidoDAO.updateEstado(idPedido, estado);
         } catch (SQLException e) {
-            throw new RuntimeException("Error actualizando pedido", e);
+            throw new RuntimeException("Error actualizando estado de pedido", e);
         }
     }
 
@@ -67,6 +75,14 @@ public class ControladorPedidos {
             if (p.getEstado() == AppConfig.EstadoPedido.PENDIENTE && !p.tieneRepartidorAsignado()) {
                 zonaDeCarga.agregarPedido(p);
             }
+        }
+    }
+
+    public static Pedido obtenerPedidoPorId(int idPedido) {
+        try {
+            return pedidoDAO.findById(idPedido);
+        } catch (SQLException e) {
+            throw new RuntimeException("Error obteniendo pedido por id", e);
         }
     }
 
