@@ -95,9 +95,4 @@ public class Repartidor implements Runnable {
             );
         }
     }
-
-    @Override
-    public String toString() {
-        return "Repartidor #" + id + " - " + nombre;
-    }
 }
