@@ -17,6 +17,11 @@ public class PedidosPanel extends JPanel {
 
     private final DefaultTableModel modelo;
     private final JTable tabla;
+    private JCheckBox chkFiltrarTipo;
+    private JCheckBox chkFiltrarEstado;
+
+    private JComboBox<AppConfig.TipoPedido> comboFiltroTipo;
+    private JComboBox<AppConfig.EstadoPedido> comboFiltroEstado;
 
     public PedidosPanel() {
 
@@ -33,6 +38,26 @@ public class PedidosPanel extends JPanel {
         };
 
         tabla = new JTable(modelo);
+
+        // PANEL DE FILTROS
+        JPanel filtros = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        chkFiltrarTipo = new JCheckBox("Filtrar por tipo");
+        chkFiltrarEstado = new JCheckBox("Filtrar por estado");
+
+        comboFiltroTipo = new JComboBox<>(AppConfig.TipoPedido.values());
+        comboFiltroEstado = new JComboBox<>(AppConfig.EstadoPedido.values());
+
+        comboFiltroTipo.setEnabled(false);
+        comboFiltroEstado.setEnabled(false);
+
+        filtros.add(chkFiltrarTipo);
+        filtros.add(comboFiltroTipo);
+        filtros.add(chkFiltrarEstado);
+        filtros.add(comboFiltroEstado);
+
+        add(filtros, BorderLayout.NORTH);
+
         JScrollPane scroll = new JScrollPane(tabla);
         add(scroll, BorderLayout.CENTER);
 
@@ -58,6 +83,30 @@ public class PedidosPanel extends JPanel {
         btnEditar.addActionListener(e -> editarPedido());
 
         btnEliminar.addActionListener(e -> eliminarPedido());
+
+        chkFiltrarTipo.addActionListener(e -> {
+            boolean enabled = chkFiltrarTipo.isSelected();
+            comboFiltroTipo.setEnabled(enabled);
+            cargarPedidos();
+        });
+
+        chkFiltrarEstado.addActionListener(e -> {
+            boolean enabled = chkFiltrarEstado.isSelected();
+            comboFiltroEstado.setEnabled(enabled);
+            cargarPedidos();
+        });
+
+        comboFiltroTipo.addActionListener(e -> {
+            if (chkFiltrarTipo.isSelected()) {
+                cargarPedidos();
+            }
+        });
+
+        comboFiltroEstado.addActionListener(e -> {
+            if (chkFiltrarEstado.isSelected()) {
+                cargarPedidos();
+            }
+        });
 
         cargarPedidos();
     }
@@ -152,7 +201,19 @@ public class PedidosPanel extends JPanel {
 
         try {
 
-            List<Pedido> pedidos = ControladorPedidos.obtenerPedidos();
+            AppConfig.TipoPedido tipo = null;
+            AppConfig.EstadoPedido estado = null;
+
+            if (chkFiltrarTipo.isSelected()) {
+                tipo = (AppConfig.TipoPedido) comboFiltroTipo.getSelectedItem();
+            }
+
+            if (chkFiltrarEstado.isSelected()) {
+                estado = (AppConfig.EstadoPedido) comboFiltroEstado.getSelectedItem();
+            }
+
+            List<Pedido> pedidos =
+                    ControladorPedidos.obtenerPedidosFiltrados(tipo, estado);
 
             for (Pedido p : pedidos) {
                 modelo.addRow(new Object[]{
@@ -172,6 +233,56 @@ public class PedidosPanel extends JPanel {
                     JOptionPane.ERROR_MESSAGE);
         }
     }
+
+
+    /*private void cargarPedidos() {
+
+        modelo.setRowCount(0);
+
+        try {
+
+            List<Pedido> pedidos = ControladorPedidos.obtenerPedidos();
+
+            for (Pedido p : pedidos) {
+
+                // FILTRO POR TIPO
+                if (chkFiltrarTipo.isSelected()) {
+                    AppConfig.TipoPedido tipoSeleccionado =
+                            (AppConfig.TipoPedido) comboFiltroTipo.getSelectedItem();
+
+                    if (!p.getTipoPedido().equals(tipoSeleccionado)) {
+                        continue;
+                    }
+                }
+
+                // FILTRO POR ESTADO
+                if (chkFiltrarEstado.isSelected()) {
+                    AppConfig.EstadoPedido estadoSeleccionado =
+                            (AppConfig.EstadoPedido) comboFiltroEstado.getSelectedItem();
+
+                    if (!p.getEstado().equals(estadoSeleccionado)) {
+                        continue;
+                    }
+                }
+
+                modelo.addRow(new Object[]{
+                        p.getIdPedido(),
+                        p.getDireccion(),
+                        p.getTipoPedido().obtenerNombre(),
+                        p.getEstado().obtenerNombre(),
+                        p.getRepartidorAsignado()
+                });
+            }
+
+        } catch (Exception ex) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Error al listar pedidos: " + ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }*/
+
 
     private void iniciarEntrega() {
 

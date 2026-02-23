@@ -86,4 +86,18 @@ public class ControladorPedidos {
         }
     }
 
+    public static List<Pedido> obtenerPedidosFiltrados(
+            AppConfig.TipoPedido tipo,
+            AppConfig.EstadoPedido estado) {
+
+        try {
+            return pedidoDAO.readByFilters(tipo, estado);
+        } catch (SQLException e) {
+            throw new RuntimeException("Error obteniendo pedidos filtrados", e);
+        }
+    }
+
+
+
+
 }

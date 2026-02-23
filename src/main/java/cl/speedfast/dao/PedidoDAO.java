@@ -170,8 +170,61 @@ public class PedidoDAO {
             }
         }
 
-        return null; // o lanzar excepción si prefieres
+        return null;
     }
 
+    public List<Pedido> readByFilters(AppConfig.TipoPedido tipo,
+                                      AppConfig.EstadoPedido estado) throws SQLException {
+
+        List<Pedido> lista = new ArrayList<>();
+
+        StringBuilder sql = new StringBuilder(
+                "SELECT p.id, p.direccion, p.tipo, p.estado, " +
+                        "r.nombre AS repartidor_nombre " +
+                        "FROM pedidos p " +
+                        "LEFT JOIN entregas e ON p.id = e.id_pedido " +
+                        "LEFT JOIN repartidores r ON e.id_repartidor = r.id " +
+                        "WHERE 1=1 "
+        );
+
+        if (tipo != null) {
+            sql.append(" AND p.tipo = ? ");
+        }
+
+        if (estado != null) {
+            sql.append(" AND p.estado = ? ");
+        }
+
+        try (Connection conn = ConexionDB.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            int index = 1;
+
+            if (tipo != null) {
+                ps.setString(index++, tipo.name());
+            }
+
+            if (estado != null) {
+                ps.setString(index++, estado.name());
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+
+                while (rs.next()) {
+
+                    Pedido pedido = mapPedido(rs);
+
+                    String repartidor = rs.getString("repartidor_nombre");
+                    pedido.setRepartidorAsignado(
+                            repartidor != null ? repartidor : "No asignado"
+                    );
+
+                    lista.add(pedido);
+                }
+            }
+        }
+
+        return lista;
+    }
 
 }
