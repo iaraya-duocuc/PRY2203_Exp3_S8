@@ -139,4 +139,39 @@ public class PedidoDAO {
         return pedido;
     }
 
+    public Pedido findById(int idPedido) throws SQLException {
+
+        String sql =
+                "SELECT p.id, p.direccion, p.tipo, p.estado, " +
+                        "r.nombre AS repartidor_nombre " +
+                        "FROM pedidos p " +
+                        "LEFT JOIN entregas e ON p.id = e.id_pedido " +
+                        "LEFT JOIN repartidores r ON e.id_repartidor = r.id " +
+                        "WHERE p.id = ?";
+
+        try (Connection conn = ConexionDB.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, idPedido);
+
+            try (ResultSet rs = ps.executeQuery()) {
+
+                if (rs.next()) {
+
+                    Pedido pedido = mapPedido(rs);
+
+                    String repartidor = rs.getString("repartidor_nombre");
+                    pedido.setRepartidorAsignado(
+                            repartidor != null ? repartidor : "No asignado"
+                    );
+
+                    return pedido;
+                }
+            }
+        }
+
+        return null; // o lanzar excepción si prefieres
+    }
+
+
 }
