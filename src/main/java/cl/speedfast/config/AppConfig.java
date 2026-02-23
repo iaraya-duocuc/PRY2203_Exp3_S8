@@ -37,6 +37,11 @@ public class AppConfig {
         public String obtenerNombre() {
             return nombre;
         }
+
+        @Override
+        public String toString() {
+            return nombre;
+        }
     }
 
     public enum EstadoPedido {
@@ -61,6 +66,11 @@ public class AppConfig {
          * @return Nombre del estado de pedido.
          */
         public String obtenerNombre() {
+            return nombre;
+        }
+
+        @Override
+        public String toString() {
             return nombre;
         }
     }
