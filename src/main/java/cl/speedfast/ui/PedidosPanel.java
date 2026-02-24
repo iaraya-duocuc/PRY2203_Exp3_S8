@@ -27,18 +27,6 @@ public class PedidosPanel extends JPanel {
 
         setLayout(new BorderLayout(10, 10));
 
-        // MODELO Y TABLA
-        modelo = new DefaultTableModel(
-                new Object[]{"ID", "Dirección", "Tipo", "Estado", "Repartidor asignado"}, 0) {
-
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-
-        tabla = new JTable(modelo);
-
         // PANEL DE FILTROS
         JPanel filtros = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
@@ -58,13 +46,25 @@ public class PedidosPanel extends JPanel {
 
         add(filtros, BorderLayout.NORTH);
 
+        // MODELO Y TABLA
+        modelo = new DefaultTableModel(
+                new Object[]{"ID pedido", "Dirección", "Tipo", "Estado", "Repartidor asignado"}, 0) {
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        tabla = new JTable(modelo);
+
         JScrollPane scroll = new JScrollPane(tabla);
         add(scroll, BorderLayout.CENTER);
 
         // BOTONES
         JPanel botones = new JPanel();
 
-        JButton btnRegistrar = new JButton("Ingresar pedido");
+        JButton btnRegistrar = new JButton("Registrar pedido");
         JButton btnEditar = new JButton("Editar pedido");
         JButton btnEliminar = new JButton("Eliminar pedido");
 
@@ -108,7 +108,7 @@ public class PedidosPanel extends JPanel {
             }
         });
 
-        cargarPedidos();
+        //cargarPedidos();
     }
 
     private void editarPedido() {
@@ -195,7 +195,7 @@ public class PedidosPanel extends JPanel {
         }
     }
 
-    private void cargarPedidos() {
+    public void cargarPedidos() {
 
         modelo.setRowCount(0);
 
