@@ -90,28 +90,6 @@ public class VentanaPedido extends JFrame {
                 throw new Exception("La dirección es obligatoria.");
             }
 
-            //String distanciaStr = txtDistancia.getText().trim();
-
-            //if (direccion.isEmpty()) {
-            //    throw new Exception("La dirección es obligatoria.");
-            //}
-
-            //if (distanciaStr.isEmpty()) {
-            //    throw new Exception("La distancia es obligatoria.");
-            //}
-
-            //double distancia;
-
-            //try {
-            //    distancia = Double.parseDouble(distanciaStr);
-            //} catch (NumberFormatException e) {
-            //    throw new Exception("Formato de distancia inválido.");
-            //}
-
-            //if (distancia <= 0) {
-            //    throw new Exception("La distancia debe ser mayor a 0.");
-            //}
-
             AppConfig.TipoPedido tipo = (AppConfig.TipoPedido) comboTipo.getSelectedItem();
             AppConfig.EstadoPedido estado = (AppConfig.EstadoPedido) comboEstado.getSelectedItem();
 
