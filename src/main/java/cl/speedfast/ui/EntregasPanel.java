@@ -82,7 +82,7 @@ public class EntregasPanel extends JPanel {
             boolean hayPendientes = ControladorPedidos
                     .obtenerPedidos()
                     .stream()
-                    .anyMatch(p -> p.getEstado() == AppConfig.EstadoPedido.PENDIENTE
+                    .anyMatch(p -> (p.getEstado() == AppConfig.EstadoPedido.PENDIENTE || p.getEstado() == AppConfig.EstadoPedido.EN_REPARTO)
                             && !p.tieneRepartidorAsignado());
 
             if (!hayPendientes) {
