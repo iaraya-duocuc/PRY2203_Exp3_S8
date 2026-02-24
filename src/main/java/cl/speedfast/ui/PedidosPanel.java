@@ -188,8 +188,8 @@ public class PedidosPanel extends JPanel {
         } catch (Exception ex) {
 
             JOptionPane.showMessageDialog(this,
-                    "No se puede eliminar el pedido.\n\n" +
-                            "Detalle: " + ex.getMessage(),
+                    "No se puede eliminar un pedido ya entregado o asociado a un repartidor.",
+                            //"Detalle: " + ex.getMessage(),
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
         }
