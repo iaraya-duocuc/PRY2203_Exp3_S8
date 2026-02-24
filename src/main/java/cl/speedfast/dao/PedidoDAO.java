@@ -205,7 +205,7 @@ public class PedidoDAO {
             }
 
             if (estado != null) {
-                ps.setString(index++, estado.name());
+                ps.setString(index, estado.name());
             }
 
             try (ResultSet rs = ps.executeQuery()) {
