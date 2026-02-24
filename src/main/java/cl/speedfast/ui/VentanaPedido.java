@@ -85,6 +85,11 @@ public class VentanaPedido extends JFrame {
         try {
 
             String direccion = txtDireccion.getText().trim();
+
+            if (direccion == null || direccion.isEmpty()) {
+                throw new Exception("La dirección es obligatoria.");
+            }
+
             //String distanciaStr = txtDistancia.getText().trim();
 
             //if (direccion.isEmpty()) {
