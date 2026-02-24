@@ -1,6 +1,8 @@
 package cl.speedfast.dao;
 
+import cl.speedfast.config.AppConfig;
 import cl.speedfast.model.Entrega;
+import cl.speedfast.model.dto.EntregaDTO;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -53,6 +55,111 @@ public class EntregaDAO {
 
         return lista;
     }
+
+    public List<EntregaDTO> readByFilters(AppConfig.TipoPedido tipo,
+                                          Integer idRepartidor) throws SQLException {
+
+        List<EntregaDTO> lista = new ArrayList<>();
+
+        StringBuilder sql = new StringBuilder(
+                "SELECT e.id AS entrega_id, " +
+                        "       p.id AS pedido_id, " +
+                        "       p.tipo, " +
+                        "       p.direccion, " +
+                        "       r.nombre, " +
+                        "       e.fecha, " +
+                        "       e.hora " +
+                        "FROM entregas e " +
+                        "JOIN pedidos p ON e.id_pedido = p.id " +
+                        "JOIN repartidores r ON e.id_repartidor = r.id " +
+                        "WHERE 1=1 "
+        );
+
+        if (tipo != null) {
+            sql.append(" AND p.tipo = ? ");
+        }
+
+        if (idRepartidor != 0) {
+            sql.append(" AND r.id = ? ");
+        }
+
+        sql.append(" ORDER BY e.id ");
+
+        try (Connection conn = ConexionDB.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            int index = 1;
+
+            if (tipo != null) {
+                ps.setString(index++, tipo.name());
+            }
+
+            if (idRepartidor != 0) {
+                ps.setInt(index, idRepartidor);
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+
+                while (rs.next()) {
+
+                    lista.add(
+                            new EntregaDTO(
+                                    rs.getInt("entrega_id"),
+                                    rs.getInt("pedido_id"),
+                                    rs.getString("tipo"),
+                                    rs.getString("nombre"),
+                                    rs.getString("direccion"),
+                                    rs.getDate("fecha").toLocalDate(),
+                                    rs.getTime("hora").toLocalTime()
+                            )
+                    );
+                }
+            }
+        }
+
+        return lista;
+    }
+
+    /*public List<EntregaDTO> readAllView() throws SQLException {
+
+        List<EntregaDTO> lista = new ArrayList<>();
+
+        String sql = """
+        SELECT e.id AS entrega_id,
+               p.id AS pedido_id,
+               p.tipo,
+               p.direccion,
+               r.nombre,
+               e.fecha,
+               e.hora
+        FROM entregas e
+        JOIN pedidos p ON e.id_pedido = p.id
+        JOIN repartidores r ON e.id_repartidor = r.id
+        ORDER BY e.id
+    """;
+
+        try (Connection conn = ConexionDB.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+
+                lista.add(
+                        new EntregaDTO(
+                                rs.getInt("entrega_id"),
+                                rs.getInt("pedido_id"),
+                                rs.getString("tipo"),       // tipoPedido
+                                rs.getString("nombre"),     // nombreRepartidor
+                                rs.getString("direccion"),  // direccionPedido
+                                rs.getDate("fecha").toLocalDate(),
+                                rs.getTime("hora").toLocalTime()
+                        )
+                );
+            }
+        }
+
+        return lista;
+    }*/
 
     public void update(Entrega entrega) throws SQLException {
 
