@@ -1,5 +1,6 @@
 package cl.speedfast.ui;
 
+import cl.speedfast.config.AppConfig;
 import cl.speedfast.controller.ControladorRepartidores;
 import cl.speedfast.model.Repartidor;
 
@@ -12,6 +13,11 @@ public class RepartidoresPanel extends JPanel {
 
     private final DefaultTableModel modelo;
     private final JTable tabla;
+    private JCheckBox chkFiltrarTipo;
+    private JCheckBox chkFiltrarRepartidor;
+
+    private JComboBox<AppConfig.TipoPedido> comboFiltroTipo;
+    private JComboBox<Repartidor> comboFiltroRepartidor;
 
     public RepartidoresPanel() {
 
@@ -19,7 +25,7 @@ public class RepartidoresPanel extends JPanel {
 
         // MODELO Y TABLA
         modelo = new DefaultTableModel(
-                new Object[]{"ID", "Nombre"}, 0) {
+                new Object[]{"ID repartidor", "Nombre"}, 0) {
 
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -54,7 +60,7 @@ public class RepartidoresPanel extends JPanel {
 
         btnEliminar.addActionListener(e -> eliminarRepartidor());
 
-        cargarRepartidores();
+        //cargarRepartidores();
     }
 
     private void editarRepartidor() {
@@ -124,7 +130,7 @@ public class RepartidoresPanel extends JPanel {
         }
     }
 
-    private void cargarRepartidores() {
+    public void cargarRepartidores() {
 
         modelo.setRowCount(0);
 
