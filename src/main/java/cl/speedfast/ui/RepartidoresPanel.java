@@ -122,9 +122,9 @@ public class RepartidoresPanel extends JPanel {
         } catch (Exception ex) {
 
             JOptionPane.showMessageDialog(this,
-                    "No se puede eliminar el repartidor.\n" +
-                            "Puede estar asociado a entregas.\n\n" +
-                            "Detalle: " + ex.getMessage(),
+                    "No se puede eliminar un repartidor asociado a una entrega.",
+                            //"Puede estar asociado a entregas.\n\n" +
+                            //"Detalle: " + ex.getMessage(),
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
         }
