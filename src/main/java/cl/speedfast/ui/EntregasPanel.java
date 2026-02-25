@@ -18,7 +18,6 @@ public class EntregasPanel extends JPanel {
     private final JTable tabla;
     private List<EntregaDTO> listaActual;
 
-
     private JCheckBox chkFiltrarTipo;
     private JCheckBox chkFiltrarRepartidor;
 
@@ -28,7 +27,6 @@ public class EntregasPanel extends JPanel {
     public EntregasPanel() {
 
         setLayout(new BorderLayout(10, 10));
-
 
         // PANEL DE FILTROS
         JPanel filtros = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -88,7 +86,7 @@ public class EntregasPanel extends JPanel {
             if (!hayPendientes) {
                 JOptionPane.showMessageDialog(
                         this,
-                        "No existen pedidos pendientes disponibles.",
+                        "No existen pedidos pendientes o en reparto actualmente.",
                         "Información",
                         JOptionPane.INFORMATION_MESSAGE
                 );
@@ -143,6 +141,28 @@ public class EntregasPanel extends JPanel {
     }
 
     private void editarEntrega() {
+        int fila = tabla.getSelectedRow();
+
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this,
+                    "Debe seleccionar una entrega.",
+                    "Advertencia",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        EntregaDTO entregaSeleccionada = listaActual.get(fila);
+
+        new VentanaEntrega(
+                entregaSeleccionada.getId(),
+                entregaSeleccionada.getIdPedido(),
+                entregaSeleccionada.getIdRepartidor(),
+                entregaSeleccionada.getDireccionPedido(),
+                entregaSeleccionada.getTipoPedido(),
+                entregaSeleccionada.getFecha(),
+                entregaSeleccionada.getHora(),
+                this::cargarEntregas
+        );
 
     }
 

@@ -11,6 +11,7 @@ public class EntregaDTO {
 
     private int id;
     private int idPedido;
+    private int idRepartidor;
     private String tipoPedido;
     private String nombreRepartidor;
     private String direccionPedido;
@@ -22,6 +23,7 @@ public class EntregaDTO {
 
     public EntregaDTO(int id,
                       int idPedido,
+                      int idRepartidor,
                       String tipoPedido,
                       String nombreRepartidor,
                       String direccionPedido,
@@ -29,6 +31,7 @@ public class EntregaDTO {
                       LocalTime hora) {
         this.id = id;
         this.idPedido = idPedido;
+        this.idRepartidor = idRepartidor;
         this.tipoPedido = tipoPedido;
         this.nombreRepartidor = nombreRepartidor;
         this.direccionPedido = direccionPedido;
@@ -66,6 +69,10 @@ public class EntregaDTO {
         return idPedido;
     }
 
+    public int getIdRepartidor() {
+        return idRepartidor;
+    }
+
     // Setters
 
     public void setId(int id) {
@@ -94,6 +101,10 @@ public class EntregaDTO {
 
     public void setIdPedido(int idPedido) {
         this.idPedido = idPedido;
+    }
+
+    public void setIdRepartidor(int idRepartidor) {
+        this.idRepartidor = idRepartidor;
     }
 
     @Override

@@ -23,11 +23,19 @@ public class ControladorEntregas {
         }
     }
 
-    public void actualizarEntrega(Entrega entrega) {
+    public static void actualizarEntrega(Entrega entrega) {
         try {
             entregaDAO.update(entrega);
         } catch (SQLException e) {
             throw new RuntimeException("Error actualizando entrega", e);
+        }
+    }
+
+    public static void actualizarRepartidorEntrega(int idEntrega, int idRepartidor) {
+        try {
+            entregaDAO.updateRepartidor(idEntrega, idRepartidor);
+        } catch (SQLException e) {
+            throw new RuntimeException("Error actualizando repartidor de entrega", e);
         }
     }
 

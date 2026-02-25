@@ -16,7 +16,8 @@ import java.util.stream.Collectors;
 
 public class VentanaEntrega extends JFrame {
 
-    private JComboBox<Pedido> comboPedidos;
+    private Integer idEntrega;
+    private JComboBox<Object> comboPedidos;
     private JComboBox<Repartidor> comboRepartidores;
 
     private JLabel lblFecha;
@@ -27,23 +28,40 @@ public class VentanaEntrega extends JFrame {
     private final Runnable onSuccess;
 
     public VentanaEntrega(Runnable onSuccess) {
+        this(null, null, null, null, null, null, null, onSuccess);
+    }
 
+    public VentanaEntrega(Integer idEntrega,
+                          Integer idPedido,
+                          Integer idRepartidorActual,
+                          String direccionPedido,
+                          String tipoPedido,
+                          LocalDate fechaEntrega,
+                          LocalTime horaEntrega,
+                          Runnable onSuccess) {
+
+        this.idEntrega = idEntrega;
         this.onSuccess = onSuccess;
 
-        setTitle("Registrar Entrega");
-        setSize(400, 250);
+        setTitle(idEntrega == null ? "Registrar Entrega" : "Editar Entrega");
+        setSize(500, 280);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         inicializarComponentes();
-        cargarDatos();
+
+        if (idEntrega == null) {
+            cargarDatosRegistro();
+        } else {
+            cargarDatosEdicion(idPedido, idRepartidorActual, direccionPedido, tipoPedido, fechaEntrega, horaEntrega);
+        }
 
         setVisible(true);
     }
 
     private void inicializarComponentes() {
 
-        setLayout(new GridLayout(5, 2, 5, 5));
+        setLayout(new GridLayout(6, 2, 5, 5));
 
         add(new JLabel("Pedido pendiente / en reparto:"));
         comboPedidos = new JComboBox<>();
@@ -61,15 +79,15 @@ public class VentanaEntrega extends JFrame {
         lblHora = new JLabel(LocalTime.now().withNano(0).toString());
         add(lblHora);
 
-        btnRegistrar = new JButton("Registrar Entrega");
+        btnRegistrar = new JButton(idEntrega == null ? "Registrar Entrega" : "Guardar cambios");
 
         add(new JLabel());
         add(btnRegistrar);
 
-        btnRegistrar.addActionListener(e -> registrarEntrega());
+        btnRegistrar.addActionListener(e -> guardarEntrega());
     }
 
-    private void cargarDatos() {
+    private void cargarDatosRegistro() {
 
         try {
 
@@ -103,20 +121,67 @@ public class VentanaEntrega extends JFrame {
         }
     }
 
+    private void cargarDatosEdicion(Integer idPedido,
+                                    Integer idRepartidorActual,
+                                    String direccionPedido,
+                                    String tipoPedido,
+                                    LocalDate fechaEntrega,
+                                    LocalTime horaEntrega) {
+        comboPedidos.removeAllItems();
+        comboPedidos.addItem("Pedido #" + idPedido + " - " + tipoPedido + " - " + direccionPedido);
+        comboPedidos.setEnabled(false);
+
+        if (fechaEntrega != null) {
+            lblFecha.setText(fechaEntrega.toString());
+        }
+
+        if (horaEntrega != null) {
+            lblHora.setText(horaEntrega.withNano(0).toString());
+        }
+
+        try {
+            comboRepartidores.removeAllItems();
+            List<Repartidor> repartidores = ControladorRepartidores.listarRepartidores();
+            for (Repartidor r : repartidores) {
+                comboRepartidores.addItem(r);
+                if (idRepartidorActual != null && r.getId() == idRepartidorActual) {
+                    comboRepartidores.setSelectedItem(r);
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error cargando repartidores: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void guardarEntrega() {
+
+        if (idEntrega == null) {
+            registrarEntrega();
+            return;
+        }
+
+        editarEntrega();
+    }
+
     private void registrarEntrega() {
 
         try {
 
-            Pedido pedido = (Pedido) comboPedidos.getSelectedItem();
+            Object pedidoSeleccionado = comboPedidos.getSelectedItem();
             Repartidor repartidor = (Repartidor) comboRepartidores.getSelectedItem();
 
-            if (pedido == null) {
+            if (!(pedidoSeleccionado instanceof Pedido)) {
                 throw new Exception("Debe seleccionar un pedido pendiente.");
             }
 
             if (repartidor == null) {
                 throw new Exception("Debe seleccionar un repartidor.");
             }
+
+            Pedido pedido = (Pedido) pedidoSeleccionado;
 
             ControladorEntregas.registrarEntrega(
                     pedido.getIdPedido(),
@@ -139,6 +204,33 @@ public class VentanaEntrega extends JFrame {
 
         } catch (Exception ex) {
 
+            JOptionPane.showMessageDialog(this,
+                    ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void editarEntrega() {
+        try {
+            Repartidor repartidor = (Repartidor) comboRepartidores.getSelectedItem();
+
+            if (repartidor == null) {
+                throw new Exception("Debe seleccionar un repartidor.");
+            }
+
+            ControladorEntregas.actualizarRepartidorEntrega(idEntrega, repartidor.getId());
+
+            JOptionPane.showMessageDialog(this,
+                    "Entrega actualizada correctamente.");
+
+            if (onSuccess != null) {
+                onSuccess.run();
+            }
+
+            dispose();
+
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(this,
                     ex.getMessage(),
                     "Error",

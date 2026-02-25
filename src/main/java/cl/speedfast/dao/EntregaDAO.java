@@ -64,6 +64,7 @@ public class EntregaDAO {
         StringBuilder sql = new StringBuilder(
                 "SELECT e.id AS entrega_id, " +
                         "       p.id AS pedido_id, " +
+                        "       e.id_repartidor, " +
                         "       p.tipo, " +
                         "       p.direccion, " +
                         "       r.nombre, " +
@@ -106,6 +107,7 @@ public class EntregaDAO {
                             new EntregaDTO(
                                     rs.getInt("entrega_id"),
                                     rs.getInt("pedido_id"),
+                                    rs.getInt("id_repartidor"),
                                     rs.getString("tipo"),
                                     rs.getString("nombre"),
                                     rs.getString("direccion"),
@@ -180,6 +182,24 @@ public class EntregaDAO {
 
             if (affectedRows == 0) {
                 throw new SQLException("No Entrega found with id: " + entrega.getId());
+            }
+        }
+    }
+
+    public void updateRepartidor(int idEntrega, int idRepartidor) throws SQLException {
+
+        String sql = "UPDATE entregas SET id_repartidor = ? WHERE id = ?";
+
+        try (Connection conn = ConexionDB.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, idRepartidor);
+            ps.setInt(2, idEntrega);
+
+            int affectedRows = ps.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new SQLException("No Entrega found with id: " + idEntrega);
             }
         }
     }
