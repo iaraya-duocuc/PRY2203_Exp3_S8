@@ -6,6 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+// Gestiona las operaciones CRUD de clientes.
 public class ClienteDAO {
 
     public void create(Cliente cliente) {

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+// Panel para gestionar pedidos del sistema.
 public class PedidosPanel extends JPanel {
 
     private final DefaultTableModel modelo;

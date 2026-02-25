@@ -9,6 +9,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
+// Panel para gestionar repartidores del sistema.
 public class RepartidoresPanel extends JPanel {
 
     private final DefaultTableModel modelo;

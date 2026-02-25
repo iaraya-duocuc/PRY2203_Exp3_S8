@@ -12,6 +12,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
+// Panel para gestionar entregas del sistema.
 public class EntregasPanel extends JPanel {
 
     private final DefaultTableModel modelo;

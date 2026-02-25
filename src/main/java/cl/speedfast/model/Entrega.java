@@ -3,6 +3,9 @@ package cl.speedfast.model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+/**
+ *  Representa una entrega realizada.
+ */
 public class Entrega {
 
     private int id;

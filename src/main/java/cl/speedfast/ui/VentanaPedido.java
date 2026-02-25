@@ -10,6 +10,7 @@ import cl.speedfast.model.PedidoExpress;
 import javax.swing.*;
 import java.awt.*;
 
+// Ventana para registrar o editar pedidos.
 public class VentanaPedido extends JFrame {
 
     private Integer idPedido; // null = registro, != null = edición

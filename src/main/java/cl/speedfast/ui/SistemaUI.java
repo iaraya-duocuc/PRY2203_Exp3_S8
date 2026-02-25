@@ -3,6 +3,7 @@ package cl.speedfast.ui;
 import javax.swing.*;
 import java.awt.*;
 
+// Ventana principal de la aplicación.
 public class SistemaUI extends JFrame {
 
     public SistemaUI() {

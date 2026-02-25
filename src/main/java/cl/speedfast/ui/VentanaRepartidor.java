@@ -5,6 +5,7 @@ import cl.speedfast.controller.ControladorRepartidores;
 import javax.swing.*;
 import java.awt.*;
 
+// Ventana para registrar o editar repartidores.
 public class VentanaRepartidor extends JFrame {
 
     private Integer idRepartidor; // null = registro, != null = edición

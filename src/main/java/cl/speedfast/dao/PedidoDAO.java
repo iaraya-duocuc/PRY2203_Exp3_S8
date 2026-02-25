@@ -7,6 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+// Gestiona las operaciones CRUD y filtros de pedidos.
 public class PedidoDAO {
 
     public void create(Pedido pedido) throws SQLException {

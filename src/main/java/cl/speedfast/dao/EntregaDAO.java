@@ -10,6 +10,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+// Gestiona las operaciones CRUD y filtros de entregas.
 public class EntregaDAO {
 
     public void create(int idPedido, int idRepartidor)  throws SQLException {

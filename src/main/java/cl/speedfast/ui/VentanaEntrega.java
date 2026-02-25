@@ -14,6 +14,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// Ventana para registrar o editar entregas.
 public class VentanaEntrega extends JFrame {
 
     private Integer idEntrega;

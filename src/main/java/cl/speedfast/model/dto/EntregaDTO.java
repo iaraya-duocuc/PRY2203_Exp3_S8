@@ -5,7 +5,7 @@ import java.time.LocalTime;
 
 /**
  * DTO utilizado para mostrar entregas en la vista.
- * No representa una tabla, sino una proyección con JOIN.
+ * No representa una tabla, sino una proyección que ayuda a dar forma a la tabla de entregas.
  */
 public class EntregaDTO {
 

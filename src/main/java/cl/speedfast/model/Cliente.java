@@ -1,5 +1,8 @@
 package cl.speedfast.model;
 
+/**
+ * Clase que representa un cliente dentro del sistema. Se incluye por requerimiento
+ */
 public class Cliente {
 
     private int id;
