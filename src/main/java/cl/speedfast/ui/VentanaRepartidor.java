@@ -60,9 +60,7 @@ public class VentanaRepartidor extends JFrame {
 
             String nombre = txtNombre.getText().trim();
 
-            if (nombre.isEmpty()) {
-                throw new Exception("El nombre no puede estar vacío");
-            }
+            validarNombre(nombre);
 
             if (idRepartidor == null) {
                 // REGISTRO
@@ -88,6 +86,31 @@ public class VentanaRepartidor extends JFrame {
 
             JOptionPane.showMessageDialog(this,
                     "Error: " + ex.getMessage());
+        }
+    }
+
+    private void validarNombre(String nombre) throws Exception {
+        if (nombre.isEmpty()) {
+            throw new Exception("El nombre no puede estar vacío.");
+        }
+
+        int letras = 0;
+
+        for (char c : nombre.toCharArray()) {
+            if (Character.isLetter(c)) {
+                letras++;
+                continue;
+            }
+
+            if (Character.isWhitespace(c)) {
+                continue;
+            }
+
+            throw new Exception("El nombre solo puede contener letras y espacios.");
+        }
+
+        if (letras < 3) {
+            throw new Exception("El nombre debe tener al menos 3 letras.");
         }
     }
 
